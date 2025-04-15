@@ -48,7 +48,7 @@ export function logout() {
 }
 
 // 获取验证码
-export function getCodeImg() {
+export function getCodeImg() {//请求获取验证码的js脚本
   return request({
     url: '/captchaImage',
     headers: {

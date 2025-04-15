@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">若依后台管理系统</h3>
+      <h3 class="title">KJR后台管理系统</h3>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -56,7 +56,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2018-2025 ruoyi.vip All Rights Reserved.</span>
+<!--      <span>Copyright © 2018-2025 ruoyi.vip All Rights Reserved.</span>-->
     </div>
   </div>
 </template>
@@ -91,7 +91,7 @@ export default {
       // 验证码开关
       captchaEnabled: true,
       // 注册开关
-      register: false,
+      register: true,
       redirect: undefined
     };
   },
@@ -108,12 +108,12 @@ export default {
     this.getCookie();
   },
   methods: {
-    getCode() {
+    getCode() {//请求getCodeImg.js脚本
       getCodeImg().then(res => {
         this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
         if (this.captchaEnabled) {
-          this.codeUrl = "data:image/gif;base64," + res.img;
-          this.loginForm.uuid = res.uuid;
+          this.codeUrl = "data:image/gif;base64," + res.img;//返回的图片base64解密
+          this.loginForm.uuid = res.uuid;//此处的uuid为后端随机生成。此处赋值给loginForm的uuid
         }
       });
     },

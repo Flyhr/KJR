@@ -1,3 +1,4 @@
+<!--管理多个打开的界面。右键界面标识-->
 <template>
   <div id="tags-view-container" class="tags-view-container">
     <scroll-pane ref="scrollPane" class="tags-view-wrapper" @scroll="handleScroll">

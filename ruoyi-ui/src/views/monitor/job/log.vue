@@ -231,10 +231,10 @@ export default {
   methods: {
     /** 查询调度日志列表 */
     getList() {
-      this.loading = true;
-      listJobLog(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          this.jobLogList = response.rows;
-          this.total = response.total;
+      this.loading = true;  // 步骤 1: 开启加载状态
+      listJobLog(this.addDateRange(this.queryParams, this.dateRange)).then(response => {  // 步骤 2: 发起异步请求获取作业日志列表
+        this.jobLogList = response.rows;    // 步骤 3: 请求成功处理
+        this.total = response.total;
           this.loading = false;
         }
       );

@@ -14,7 +14,7 @@ import com.ruoyi.common.xss.Xss;
 
 /**
  * 用户对象 sys_user
- * 
+ *
  * @author ruoyi
  */
 public class SysUser extends BaseEntity
@@ -40,7 +40,9 @@ public class SysUser extends BaseEntity
     /** 用户邮箱 */
     @Excel(name = "用户邮箱")
     private String email;
-
+    //用户角色名称
+    @Excel(name = "用户角色名称")
+    private String roleName;
     /** 手机号码 */
     @Excel(name = "手机号码", cellType = ColumnType.TEXT)
     private String phonenumber;
@@ -186,7 +188,8 @@ public class SysUser extends BaseEntity
     {
         this.sex = sex;
     }
-
+//    public String getRoleName(){return roleName;}
+//    public  void setRoleName(String roleName){this.roleName = roleName;}
     public String getAvatar()
     {
         return avatar;
@@ -304,6 +307,7 @@ public class SysUser extends BaseEntity
             .append("deptId", getDeptId())
             .append("userName", getUserName())
             .append("nickName", getNickName())
+//            .append("roleName", getRoleName())
             .append("email", getEmail())
             .append("phonenumber", getPhonenumber())
             .append("sex", getSex())

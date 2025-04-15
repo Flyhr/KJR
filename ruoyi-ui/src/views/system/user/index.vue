@@ -18,13 +18,18 @@
           <el-col>
             <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
               <el-form-item label="用户名称" prop="userName">
-                <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable style="width: 240px" @keyup.enter.native="handleQuery" />
+                <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable style="width: 200px" @keyup.enter.native="handleQuery" />
+              </el-form-item>
+              <el-form-item label="用户角色" prop="role">
+                <el-select v-model="form.roleIds" multiple placeholder="请选择角色" >
+                  <el-option v-for="item in roleOptions" :key="item.roleId" :label="item.roleName" :value="item.roleId" :disabled="item.status == 1"/>
+                </el-select>
               </el-form-item>
               <el-form-item label="手机号码" prop="phonenumber">
-                <el-input v-model="queryParams.phonenumber" placeholder="请输入手机号码" clearable style="width: 240px" @keyup.enter.native="handleQuery" />
+                <el-input v-model="queryParams.phonenumber" placeholder="请输入手机号码" clearable style="width: 200px" @keyup.enter.native="handleQuery" />
               </el-form-item>
               <el-form-item label="状态" prop="status">
-                <el-select v-model="queryParams.status" placeholder="用户状态" clearable style="width: 240px">
+                <el-select v-model="queryParams.status" placeholder="用户状态" clearable style="width: 200px">
                   <el-option v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.label" :value="dict.value" />
                 </el-select>
               </el-form-item>
@@ -36,8 +41,7 @@
                 <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
               </el-form-item>
             </el-form>
-
-            <el-row :gutter="10" class="mb8">
+           <el-row :gutter="10" class="mb8">
               <el-col :span="1.5">
                 <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPermi="['system:user:add']">新增</el-button>
               </el-col>
@@ -274,7 +278,8 @@ export default {
         userName: undefined,
         phonenumber: undefined,
         status: undefined,
-        deptId: undefined
+        deptId: undefined,
+        roleName:undefined
       },
       // 列信息
       columns: [
@@ -329,6 +334,8 @@ export default {
     this.getConfigKey("sys.user.initPassword").then(response => {
       this.initPassword = response.msg;
     });
+  // 调用获取角色数据的方法
+    this.getRoleOptions();
   },
   methods: {
     /** 查询用户列表 */
@@ -341,10 +348,19 @@ export default {
         }
       );
     },
+    // 获取角色数据的方法
+    getRoleOptions() {
+      getUser().then(response => {
+        this.roleOptions = response.roles;
+        });
+      },
+
     /** 查询部门下拉树结构 */
     getDeptTree() {
       deptTreeSelect().then(response => {
         this.deptOptions = response.data;
+        // 增加console.log调试查看数据结构
+        console.log('部门树数据:', JSON.parse(JSON.stringify(this.deptOptions)));
         this.enabledDeptOptions = this.filterDisabledDept(JSON.parse(JSON.stringify(response.data)));
       });
     },

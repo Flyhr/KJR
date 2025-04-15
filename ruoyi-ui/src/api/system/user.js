@@ -10,6 +10,17 @@ export function listUser(query) {
   })
 }
 
+
+//查询对应角色的用户
+export function role_listUser(query,roleId){
+  return request({
+    url:"/system/user/list",
+    method:"get_role",
+    params:query
+  })
+}
+
+
 // 查询用户详细
 export function getUser(userId) {
   return request({
