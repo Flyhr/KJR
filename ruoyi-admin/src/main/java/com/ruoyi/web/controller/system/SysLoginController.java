@@ -2,6 +2,10 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import java.util.Set;
+
+import com.ruoyi.DocSys.domain.IntegratedHealthData;
+import com.ruoyi.DocSys.service.impl.IntegratedHealthDataService;
+import com.ruoyi.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +25,7 @@ import com.ruoyi.system.service.ISysMenuService;
 
 /**
  * 登录验证
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -38,10 +42,12 @@ public class SysLoginController
 
     @Autowired
     private TokenService tokenService;
-
+    private ISysUserService userService;
+    @Autowired
+    private IntegratedHealthDataService integratedHealthDataService;
     /**
      * 登录方法
-     * 
+     *
      * @param loginBody 登录信息
      * @return 结果
      */
@@ -58,7 +64,7 @@ public class SysLoginController
 
     /**
      * 获取用户信息
-     * 
+     *
      * @return 用户信息
      */
     @GetMapping("getInfo")
@@ -75,16 +81,21 @@ public class SysLoginController
             loginUser.setPermissions(permissions);
             tokenService.refreshToken(loginUser);
         }
+        // 查询设备数据
+        IntegratedHealthData deviceInfo = integratedHealthDataService.selectLatestByUserId(user.getUserId());
+
         AjaxResult ajax = AjaxResult.success();
         ajax.put("user", user);
         ajax.put("roles", roles);
         ajax.put("permissions", permissions);
+        ajax.put("devices", deviceInfo); // 添加设备数据到返回结果
+
         return ajax;
     }
 
     /**
      * 获取路由信息
-     * 
+     *
      * @return 路由信息
      */
     @GetMapping("getRouters")

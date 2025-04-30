@@ -10,4 +10,106 @@
         ORDER BY create_time DESC
         LIMIT 1;
     </select>
+
+    <!-- 更新设备数据 -->
+    <update id="updateSensorData" parameterType="com.ruoyi.DocSys.domain.IntegratedHealthData">
+        UPDATE integrated_health_data
+        SET
+            device_name = #{deviceName},
+            device_mac = #{deviceMac},
+            update_time = NOW(),
+            knee = #{knee},
+            temperature = #{temperature},
+            walk = #{walk},
+            speed = #{speed},
+            distance = #{distance},
+            remark = #{remark}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- 插入设备数据 -->
+    <insert id="insertSensorData" parameterType="com.ruoyi.DocSys.domain.IntegratedHealthData">
+        INSERT INTO integrated_health_data
+        (device_name, device_mac, user_id, create_time, update_time, knee, temperature, walk, speed, distance, remark)
+        VALUES
+            (#{deviceName}, #{deviceMac}, #{userId}, NOW(), NOW(), #{knee}, #{temperature}, #{walk}, #{speed}, #{distance}, #{remark})
+    </insert>
+
+    <!-- 根据用户ID删除设备数据 -->
+    <delete id="deleteHealthDataByUserId" parameterType="long">
+        DELETE FROM integrated_health_data WHERE user_id = #{userId}
+    </delete>
+
+
+<!--用户基础信息-->
+    <!-- 查询所有记录 -->
+    <select id="selectAllByUserId" parameterType="Long" resultType="com.ruoyi.DocSys.domain.UserBasicInfo">
+        SELECT
+            id, name, weight, height, gender, age, smoking,
+            temp, temp_cut as tempCut, pulse, sbp, dbp, swelling,
+            knee, step, pain, decri, predict_result as predictResult,
+            doctor_result as doctorResult, create_time as createTime,
+            update_time as updateTime
+        FROM integrated_data_table
+    </select>
+
+    <!-- 根据 id 查询记录 -->
+    <select id="selectUserBasicInfoByUserId" parameterType="java.lang.Long" resultType="com.ruoyi.DocSys.domain.UserBasicInfo">
+        SELECT
+            id, name, weight, height, gender, age, smoking,
+            temp, temp_cut as tempCut, pulse, sbp, dbp, swelling,
+            knee, step, pain, decri, predict_result as predictResult,
+            doctor_result as doctorResult, create_time as createTime,
+            update_time as updateTime
+        FROM integrated_data_table
+        WHERE id = #{id}
+    </select>
+
+    <!-- 插入一条记录 -->
+    <insert id="insertUserBasicInfo" parameterType="com.ruoyi.DocSys.domain.UserBasicInfo">
+        INSERT INTO integrated_data_table (
+            id, name, weight, height, gender, age, smoking,
+            temp, temp_cut, pulse, sbp, dbp, swelling,
+            knee, step, pain, decri, predict_result,
+            doctor_result, create_time, update_time
+        ) VALUES (
+                     #{id}, #{name}, #{weight}, #{height}, #{gender}, #{age}, #{smoking},
+                     #{temp}, #{tempCut}, #{pulse}, #{sbp}, #{dbp}, #{swelling},
+                     #{knee}, #{step}, #{pain}, #{decri}, #{predictResult},
+                     #{doctorResult}, #{createTime}, #{updateTime}
+                 )
+    </insert>
+
+    <!-- 根据 id 更新记录 -->
+    <update id="updateUserBasicInfo" parameterType="com.ruoyi.DocSys.domain.UserBasicInfo">
+        UPDATE integrated_data_table
+        SET
+            name = #{name},
+            weight = #{weight},
+            height = #{height},
+            gender = #{gender},
+            age = #{age},
+            smoking = #{smoking},
+            temp = #{temp},
+            temp_cut = #{tempCut},
+            pulse = #{pulse},
+            sbp = #{sbp},
+            dbp = #{dbp},
+            swelling = #{swelling},
+            knee = #{knee},
+            step = #{step},
+            pain = #{pain},
+            decri = #{decri},
+            predict_result = #{predictResult},
+            doctor_result = #{doctorResult},
+            create_time = #{createTime},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据 id 删除记录 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM integrated_data_table
+        WHERE id = #{id}
+    </delete>
 </mapper>
