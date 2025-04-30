@@ -3,6 +3,18 @@ import com.ruoyi.DocSys.domain.IntegratedHealthData;
 import io.lettuce.core.dynamic.annotation.Param;
 
 public interface IntegratedHealthDataMapper {
-    // 查询最新一条数据（如果数据只保留最新一条或按时间查询）
-    IntegratedHealthData selectLatestByUserId(@Param("userId") Long userId);
+    /**
+     * 根据 userId 查询最新的一条记录
+     */
+    IntegratedHealthData selectLatestByUserId(Long userId);
+
+    /**
+     * 更新设备数据（根据 userId 更新）
+     */
+    int updateSensorData(IntegratedHealthData sensorData);
+
+    /**
+     * 插入设备数据
+     */
+    int insertSensorData(IntegratedHealthData sensorData);
 }

@@ -360,7 +360,7 @@ export default {
       deptTreeSelect().then(response => {
         this.deptOptions = response.data;
         // 增加console.log调试查看数据结构
-        console.log('部门树数据:', JSON.parse(JSON.stringify(this.deptOptions)));
+        console.log('部门树数据11:', JSON.parse(JSON.stringify(this.deptOptions)));
         this.enabledDeptOptions = this.filterDisabledDept(JSON.parse(JSON.stringify(response.data)));
       });
     },

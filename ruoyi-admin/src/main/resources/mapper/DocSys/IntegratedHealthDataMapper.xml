@@ -10,4 +10,29 @@
         ORDER BY create_time DESC
         LIMIT 1;
     </select>
+
+    <!-- 更新设备数据 -->
+    <update id="updateSensorData" parameterType="com.ruoyi.DocSys.domain.IntegratedHealthData">
+        UPDATE integrated_health_data
+        SET
+            device_name = #{deviceName},
+            device_mac = #{deviceMac},
+            update_time = NOW(),
+            knee = #{knee},
+            temperature = #{temperature},
+            walk = #{walk},
+            speed = #{speed},
+            distance = #{distance},
+            remark = #{remark}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- 插入设备数据 -->
+    <insert id="insertSensorData" parameterType="com.ruoyi.DocSys.domain.IntegratedHealthData">
+        INSERT INTO integrated_health_data
+        (device_name, device_mac, user_id, create_time, update_time, knee, temperature, walk, speed, distance, remark)
+        VALUES
+            (#{deviceName}, #{deviceMac}, #{userId}, NOW(), NOW(), #{knee}, #{temperature}, #{walk}, #{speed}, #{distance}, #{remark})
+    </insert>
+
 </mapper>
