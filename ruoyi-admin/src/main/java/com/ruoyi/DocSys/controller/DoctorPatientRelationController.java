@@ -23,7 +23,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 医生患者关系Controller
- * 
+ *
  * @author ruoyi
  * @date 2025-03-31
  */
@@ -37,14 +37,14 @@ public class DoctorPatientRelationController extends BaseController
     /**
      * 查询医生患者关系列表
      */
-    @PreAuthorize("@ss.hasPermi('DocSys:relation:list')")
-    @GetMapping("/list")
-    public TableDataInfo list(DoctorPatientRelation doctorPatientRelation)
-    {
-        startPage();
-        List<DoctorPatientRelation> list = doctorPatientRelationService.selectDoctorPatientRelationList(doctorPatientRelation);
-        return getDataTable(list);
-    }
+//    @PreAuthorize("@ss.hasPermi('DocSys:relation:list')")
+//    @GetMapping("/list")
+//    public TableDataInfo list(DoctorPatientRelation doctorPatientRelation)
+//    {
+//        startPage();
+//        List<DoctorPatientRelation> list = doctorPatientRelationService.selectDoctorPatientRelationList(doctorPatientRelation);
+//        return getDataTable(list);
+//    }
 
     /**
      * 导出医生患者关系列表
