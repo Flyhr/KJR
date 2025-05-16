@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.DocSys.mapper.DoctorPatientRelationMapper">
+    
+    <resultMap type="DoctorPatientRelation" id="DoctorPatientRelationResult">
+        <result property="id"    column="id"    />
+        <result property="docId"    column="doc_id"    />
+        <result property="patId"    column="pat_id"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectDoctorPatientRelationVo">
+        select id, doc_id, pat_id, create_time from doctor_patient_relation
+    </sql>
+
+    <select id="selectDoctorPatientRelationList" parameterType="DoctorPatientRelation" resultMap="DoctorPatientRelationResult">
+        <include refid="selectDoctorPatientRelationVo"/>
+        <where>  
+            <if test="docId != null "> and doc_id = #{docId}</if>
+            <if test="patId != null "> and pat_id = #{patId}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectDoctorPatientRelationById" parameterType="Long" resultMap="DoctorPatientRelationResult">
+        <include refid="selectDoctorPatientRelationVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertDoctorPatientRelation" parameterType="DoctorPatientRelation" useGeneratedKeys="true" keyProperty="id">
+        insert into doctor_patient_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="docId != null">doc_id,</if>
+            <if test="patId != null">pat_id,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="docId != null">#{docId},</if>
+            <if test="patId != null">#{patId},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDoctorPatientRelation" parameterType="DoctorPatientRelation">
+        update doctor_patient_relation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="docId != null">doc_id = #{docId},</if>
+            <if test="patId != null">pat_id = #{patId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDoctorPatientRelationById" parameterType="Long">
+        delete from doctor_patient_relation where id = #{id}
+    </delete>
+
+    <delete id="deleteDoctorPatientRelationByIds" parameterType="String">
+        delete from doctor_patient_relation where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
