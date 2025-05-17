@@ -10,4 +10,243 @@
         ORDER BY create_time DESC
         LIMIT 1;
     </select>
+
+    <!-- 更新设备数据 -->
+    <update id="updateSensorData" parameterType="com.ruoyi.DocSys.domain.IntegratedHealthData">
+        UPDATE integrated_health_data
+        SET
+            device_name = #{deviceName},
+            device_mac = #{deviceMac},
+            update_time = NOW(),
+            knee = #{knee},
+            temperature = #{temperature},
+            walk = #{walk},
+            speed = #{speed},
+            update_time = NOW(),
+            distance = #{distance},
+            remark = #{remark}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- 插入设备数据 -->
+    <insert id="insertSensorData" parameterType="com.ruoyi.DocSys.domain.IntegratedHealthData">
+        INSERT INTO integrated_health_data
+        (device_name, device_mac, user_id, create_time, update_time, knee, temperature, walk, speed, distance, remark)
+        VALUES
+            (#{deviceName}, #{deviceMac}, #{userId}, NOW(), NOW(), #{knee}, #{temperature}, #{walk}, #{speed}, #{distance}, #{remark})
+    </insert>
+
+    <!-- 根据用户ID删除设备数据 -->
+    <delete id="deleteHealthDataByUserId" parameterType="long">
+        DELETE FROM integrated_health_data WHERE user_id = #{userId}
+    </delete>
+
+
+<!--用户基础信息-->
+    <!-- 查询所有记录 -->
+    <select id="selectAllByUserId" parameterType="Long" resultType="com.ruoyi.DocSys.domain.UserBasicInfo">
+        SELECT
+            id, name, weight, height, gender, age, smoking,
+            temp, temp_cut as tempCut, pulse, sbp, dbp, swelling,
+            knee, step, pain, decri, predict_result as predictResult,
+            doctor_result as doctorResult, create_time as createTime,
+            update_time as updateTime
+        FROM integrated_data_table
+    </select>
+
+    <!-- 根据 id 查询记录 -->
+    <select id="selectUserBasicInfoByUserId" parameterType="java.lang.Long" resultType="com.ruoyi.DocSys.domain.UserBasicInfo">
+        SELECT
+            id, name, weight, height, gender, age, smoking,
+            temp, temp_cut as tempCut, pulse, sbp, dbp, swelling,
+            knee, step, pain, decri, predict_result as predictResult,
+            doctor_result as doctorResult, create_time as createTime,
+            update_time as updateTime
+        FROM integrated_data_table
+        WHERE id = #{id}
+    </select>
+
+    <!-- 插入一条记录 -->
+    <insert id="insertUserBasicInfo" parameterType="com.ruoyi.DocSys.domain.UserBasicInfo">
+        INSERT INTO integrated_data_table (
+            id, name, weight, height, gender, age, smoking,
+            temp, temp_cut, pulse, sbp, dbp, swelling,
+            knee, step, pain, decri, predict_result,
+            doctor_result, create_time, update_time
+        ) VALUES (
+                     #{id}, #{name}, #{weight}, #{height}, #{gender}, #{age}, #{smoking},
+                     #{temp}, #{tempCut}, #{pulse}, #{sbp}, #{dbp}, #{swelling},
+                     #{knee}, #{step}, #{pain}, #{decri}, #{predictResult},
+                     #{doctorResult}, #{createTime}, #{updateTime}
+                 )
+    </insert>
+
+    <!-- 根据 id 更新记录 -->
+    <update id="updateUserBasicInfo" parameterType="com.ruoyi.DocSys.domain.UserBasicInfo">
+        UPDATE integrated_data_table
+        SET
+            name = #{name},
+            weight = #{weight},
+            height = #{height},
+            gender = #{gender},
+            age = #{age},
+            smoking = #{smoking},
+            temp = #{temp},
+            temp_cut = #{tempCut},
+            pulse = #{pulse},
+            sbp = #{sbp},
+            dbp = #{dbp},
+            swelling = #{swelling},
+            knee = #{knee},
+            step = #{step},
+            pain = #{pain},
+            decri = #{decri},
+            predict_result = #{predictResult},
+            doctor_result = #{doctorResult},
+            create_time = #{createTime},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据 id 删除记录 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM integrated_data_table
+        WHERE id = #{id}
+    </delete>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--    用户查询自己的医生-->
+<!--    <resultMap type="DoctorPatientRelation" id="DoctorPatientRelationResult">-->
+<!--        <result property="id"    column="id"    />-->
+<!--        <result property="docId"    column="doc_id"    />-->
+<!--        <result property="patId"    column="pat_id"    />-->
+<!--        <result property="createTime"    column="create_time"    />-->
+<!--    </resultMap>-->
+
+<!--    <sql id="selectDoctorPatientRelationVo">-->
+<!--        select id, doc_id, pat_id, create_time from doctor_patient_relation-->
+<!--    </sql>-->
+
+<!--    <select id="selectDoctorPatientRelationList" parameterType="DoctorPatientRelation" resultMap="DoctorPatientRelationResult">-->
+<!--        <include refid="selectDoctorPatientRelationVo"/>-->
+<!--        <where>-->
+<!--            <if test="docId != null "> and doc_id = #{docId}</if>-->
+<!--            <if test="patId != null "> and pat_id = #{patId}</if>-->
+<!--            <if test="createTime != null "> and create_time = #{createTime}</if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+    <!-- 根据患者 id 查询关系表 -->
+    <select id="getDoctorRelationByUserId" parameterType="java.lang.Long" resultType="com.ruoyi.DocSys.domain.DoctorPatientRelation">
+        SELECT
+            id, doc_id AS docId, pat_id AS patId,  create_time as createTime
+        FROM doctor_patient_relation
+        WHERE pat_id = #{userId}
+    </select>
+    <!-- 根据医生 id 查询关系表 -->
+    <select id="getPatientRelationByUserId" parameterType="java.lang.Long" resultType="com.ruoyi.DocSys.domain.DoctorPatientRelation">
+        SELECT
+            id, doc_id AS docId, pat_id AS patId,  create_time as createTime
+        FROM doctor_patient_relation
+        WHERE doc_id = #{userId}
+    </select>
+    <!-- 患者查询自己医生：根据 userId 查询医生信息 -->
+    <select id="getDoctorInfoByUserId" parameterType="java.lang.Long" resultType="com.ruoyi.common.core.domain.entity.SysUser">
+        SELECT
+            user_id AS userId,
+            dept_id AS deptId,
+            user_name AS userName,
+            nick_name AS nickName,
+            user_type,
+            email ,
+            phonenumber AS phonenumber,
+            sex,
+            avatar,
+            password,
+            status,
+            del_flag AS delFlag,
+            login_ip AS loginIp,
+            login_date AS loginDate,
+            create_by AS createBy,
+            create_time AS createTime,
+            update_by AS updateBy,
+            update_time AS updateTime,
+            remark
+
+        FROM sys_user
+        WHERE user_id = #{docId}
+    </select>
+    <!-- 医生查询自己患者：根据 patId 查询患者信息 -->
+    <select id="getPatientInfoByUserId" parameterType="java.lang.Long" resultType="com.ruoyi.common.core.domain.entity.SysUser">
+        SELECT
+            user_id AS userId,
+            dept_id AS deptId,
+            user_name AS userName,
+            nick_name AS nickName,
+            user_type,
+            email ,
+            phonenumber AS phonenumber,
+            sex,
+            avatar,
+            password,
+            status,
+            del_flag AS delFlag,
+            login_ip AS loginIp,
+            login_date AS loginDate,
+            create_by AS createBy,
+            create_time AS createTime,
+            update_by AS updateBy,
+            update_time AS updateTime,
+            remark
+
+        FROM sys_user
+        WHERE user_id = #{PatId}
+    </select>
+
+
+<!--医生：添加自己的患者-->
+    <!-- 医生：添加自己的患者 -->
+    <insert id="insertRelation" parameterType="com.ruoyi.DocSys.domain.DoctorPatientRelation" useGeneratedKeys="true" keyProperty="id">
+        insert into doctor_patient_relation (doc_id, pat_id,create_time)
+        values (#{docId}, #{patId},NOW())
+    </insert>
+<!--医生：根据患者的姓名和电话查询患者的信息-->
+    <select id="selectPatientInfo" parameterType="map" resultType="com.ruoyi.common.core.domain.entity.SysUser">
+        SELECT
+            user_id AS userId,
+            dept_id AS deptId,
+            user_name AS userName,
+            nick_name AS nickName,
+            user_type,
+            email,
+            phonenumber AS phonenumber,
+            sex,
+            avatar,
+            password,
+            status,
+            del_flag AS delFlag,
+            login_ip AS loginIp,
+            login_date AS loginDate,
+            create_by AS createBy,
+            create_time AS createTime,
+            update_by AS updateBy,
+            update_time AS updateTime,
+            remark
+        FROM sys_user
+        WHERE user_name = #{param1}
+          AND phonenumber = #{param2}
+    </select>
+
+
 </mapper>

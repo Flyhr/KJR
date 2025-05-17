@@ -23,7 +23,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 医生信息Controller
- * 
+ *
  * @author ruoyi
  * @date 2025-03-31
  */
@@ -37,14 +37,14 @@ public class DocInfoController extends BaseController
     /**
      * 查询医生信息列表
      */
-    @PreAuthorize("@ss.hasPermi('DocSys:Doc:list')")
-    @GetMapping("/list")
-    public TableDataInfo list(DocInfo docInfo)
-    {
-        startPage();
-        List<DocInfo> list = docInfoService.selectDocInfoList(docInfo);
-        return getDataTable(list);
-    }
+//    @PreAuthorize("@ss.hasPermi('DocSys:Doc:list')")
+//    @GetMapping("/list")
+//    public TableDataInfo list(DocInfo docInfo)
+//    {
+//        startPage();
+//        List<DocInfo> list = docInfoService.selectDocInfoList(docInfo);
+//        return getDataTable(list);
+//    }
 
     /**
      * 导出医生信息列表
